@@ -1,0 +1,95 @@
+{% extends 'layout.html' %}
+
+{% block title %} Device {% endblock %}
+
+{% block content %}
+
+<div class="starter-template">
+    <h2>Data Barang</h2>
+    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Tambahkan</button>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Nomor</th>
+            <th>Nama Barang</th>
+            <th>Jenis Barang</th>
+            <th>Harga</th>
+            <th>Aksi</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for device in devices %}
+        <tr>
+            <td>{{ device['device_id'] }}</td>
+            <td>{{ device['name'] }}</td>
+            <td>{{ device['type'] }}</td>
+            <td>{{ device['price'] }}</td>
+            <td>
+                <a href="#" button class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modalEdit{{ device['device_id'] }}">Edit</a>
+                <a href="/deleteDevice/{{ device['device_id'] }}" class="btn btn-danger btn-xs" onclick="return confirm('Yakin ingin hapus?')">Hapus</a>
+                </td>
+        </tr>
+        <div id="modalEdit{{ device['device_id'] }}" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Edit Data</h4>
+            </div>
+            <div class="modal-body">
+                <form action="{{ url_for('updateDevice') }}" method="POST">
+                    <div class="form-group">
+                        <p>Nama Perangkat:
+                        <input type="hidden" name="id" value="{{ device['device_id'] }}"/>
+                        <input type ="text" name = "name" value="{{ device['name'] }}"/></p>
+                        <p> Tipe Perangkat:
+                        <input type="hidden" name="id" value="{{ device['device_id'] }}"/>
+                        <input type ="text" name = "type" value="{{ device['type'] }}"/></p>
+                        <p>Harga Perangkat:
+                        <input type="hidden" name="id" value="{{ device['device_id'] }}"/>
+                        <input type ="text" name = "price" value="{{ device['price'] }}"/></p>
+                    </div>
+                    <div class="form-group"> 
+                        <button class="btn btn-primary" type="submit">EDIT</button>
+                    </div>
+                </form>       
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>       
+            </div>
+            </div>
+            </div>       
+        </div>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+      
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+    <div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Tambah Data</h4>
+    </div>
+    <div class="modal-body">
+        <form action="{{ url_for('createDevice') }}" method="POST">
+            <div class="form-group">
+                <p>Nama Perangkat :<input type ="text" name = "name" id="name" required/></p>
+                <p>Tipe Perangkat :<input type ="text" name = "type" id="type" required/></p>
+                <p>Harga Perangkat :<input type ="number" name = "price" id="price" required/></p>
+            </div>
+            <div class="form-group"> 
+                <button class="btn btn-primary" type="submit">SAVE</button>
+            </div>
+        </form>       
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>       
+    </div>
+    </div>
+    </div>       
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,88 @@
+{% extends 'layout.html' %}
+
+{% block title %} News {% endblock %}
+
+{% block content %}
+
+<div class="starter-template">
+    <h2>Pilihan Berita</h2>
+    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Tambahkan</button>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Nomor</th>
+            <th>Berita</th>
+            <th>Deskripsi</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for new in news %}
+        <tr>
+            <td>{{ new['news_id'] }}</td>
+            <td>{{ new['title'] }}</td>
+            <td>{{ new['description'] }}</td>
+            <td>
+                <a href="#" button class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modalEdit{{ new['news_id'] }}">Edit</a>
+                <a href="/deleteNews/{{ new['news_id'] }}" class="btn btn-danger btn-xs" onclick="return confirm('Yakin ingin hapus?')">Hapus</a>
+                </td>
+        </tr>
+        <div id="modalEdit{{ new['news_id'] }}" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Edit Data</h4>
+            </div>
+            <div class="modal-body">
+                <form action="{{ url_for('updateNews') }}" method="POST">
+                    <div class="form-group">
+                        <p>Judul Berita:
+                        <input type="hidden" name="id" value="{{ new['news_id'] }}"/>
+                        <input type ="text" name = "title" value="{{ new['title'] }}"/></p>
+                        <p> Deskripsi Berita:
+                        <input type="hidden" name="id" value="{{ new['news_id'] }}"/>
+                        <input type ="text" name = "description" value="{{ new['description'] }}"/></p>                            
+                    </div>
+                    <div class="form-group"> 
+                        <button class="btn btn-primary" type="submit">EDIT</button>
+                    </div>
+                </form>       
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>       
+            </div>
+            </div>
+            </div>       
+        </div>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+      
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+    <div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Tambah Data</h4>
+    </div>
+    <div class="modal-body">
+        <form action="{{ url_for('createNews') }}" method="POST">
+            <div class="form-group">
+                <p>Judul Berita :<input type ="text" name = "title" id="title" required/></p>
+                <p>Deskripsi Berita :<input type ="text" name = "description" id="description" required/></p>
+            </div>
+            <div class="form-group"> 
+                <button class="btn btn-primary" type="submit">SAVE</button>
+            </div>
+        </form>       
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>       
+    </div>
+    </div>
+    </div>       
+</div>
+
+
+{% endblock %}
